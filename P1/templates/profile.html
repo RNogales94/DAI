@@ -1,0 +1,22 @@
+{% extends 'home.html' %}
+
+{% block title %} {{ username }} {% endblock %}
+
+
+{% block nav %}
+<ul class="nav nav-pills float-right">
+  <li class="nav-item">
+    <a class="nav-link active" href="#">{{username}} <span class="sr-only">(current)</span></a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block nav_title %} {{ username }} {% endblock %}
+
+
+{% block panel %}
+<div class="jumbotron">
+  <h3 class="display-3">{{username}}</h3>
+  <p> Bienvenido a tu perfil {{username}} </p>
+</div>
+{% endblock %}
