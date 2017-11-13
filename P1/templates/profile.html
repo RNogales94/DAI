@@ -5,18 +5,46 @@
 
 {% block nav %}
 <ul class="nav nav-pills float-right">
+
   <li class="nav-item">
-    <a class="nav-link active" href="#">{{username}} <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/gatitos">gatitos<span class="sr-only">(current)</span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="/logout">logout {{username}} <span class="sr-only">(current)</span></a>
   </li>
 </ul>
 {% endblock %}
 
 {% block nav_title %} {{ username }} {% endblock %}
+        {% block panel %}
+        <div class="row">
+        <div class="col-2">
+                <h3> Historial </h3>
+                <ul class="float-right">
+                {% for item in history %}
+                        <li>
+                            {{item}}
+                        </li>
+                {% endfor %}
+                </ul>
+        </div>
+        <div class="col-10">
+                <div class="jumbotron">
+                  <h3 class="display-3">{{username}}</h3>
+                  <p> Bienvenido a tu perfil {{username}} </p>
+                  <form action="" method = "post">
+                          <div class="row">
+                                  <input type="text" name="username" value="{{ username }}">
+                          </div>
+                          <div class="row">
+                                  <input type="password" name="password" value="{{ password }}">
+                          </div>
+                          <div class="row">
+                                  <input type="submit" value="Edit">
+                          </div>
+                   </form>
+                </div>
 
-
-{% block panel %}
-<div class="jumbotron">
-  <h3 class="display-3">{{username}}</h3>
-  <p> Bienvenido a tu perfil {{username}} </p>
-</div>
-{% endblock %}
+        </div>
+        </div>
+        {% endblock %}

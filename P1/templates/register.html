@@ -1,0 +1,28 @@
+{% extends 'home.html' %}
+
+{% block title %} register {% endblock %}
+
+
+{% block nav %}
+<ul class="nav nav-pills float-right">
+  <li class="nav-item">
+    <a class="nav-link active" href="/"> Home <span class="sr-only">(current)</span></a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block nav_title %} Registrarse {% endblock %}
+        {% block panel %}
+        <form action="" method = "post">
+                <div class="row">
+                        <input type="text" name="username" placeholder="username">
+                </div>
+                <div class="row">
+                        <input type="password" name="password" placeholder="password">
+                </div>
+                <div class="row">
+                        <input type="submit" value="Login">
+                </div>
+         </form>
+
+        {% endblock %}

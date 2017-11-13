@@ -2,7 +2,6 @@
 
 {% block title %} Home {% endblock %}
 
-
 {% block content %}
 
 <div class="header clearfix">
@@ -10,16 +9,37 @@
     {% block nav %}
     <ul class="nav nav-pills float-right">
       <li class="nav-item">
-        <a class="nav-link active" href="/">Gatitos <span class="sr-only">(current)</span></a>
+        <a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
+      {% if not loggedIn %}
       <li class="nav-item">
-        <a class="nav-link" href="#">Mandelbrot</a>
+        <a class="nav-link" href="/register">Register</a>
       </li>
+      {% else %}
       <li class="nav-item">
-        <a class="nav-link" href="#">Vectorial</a>
+        <a class="nav-link" href="/users/{{ username }}">Perfil</a>
       </li>
+      {% endif %}
+
+      {% if not loggedIn %}
+      {% block login_form %}
+      <li class="nav-item">
+          <form action="" method = "post">
+              <input type="text" name="username" placeholder="username">
+              <input type="password" name="password" placeholder="password">
+              <input type="submit" value="Login">
+           </form>
+      </li>
+      {% endblock %}
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">logout<span class="sr-only">(current)</span></a>
+      </li>
+      {% endif %}
+
     </ul>
     {% endblock %}
+
   </nav>
 
   <h3 class="text-muted">{% block nav_title %} Gatitos {% endblock %}</h3>
@@ -31,7 +51,7 @@
   <p class="lead">Desde los tiempos de los egipcios la humanidad se ha visto fascinada por los felinos.
 
   Pulsa el boton para ver fotos de gatitos servidas estáticamente desde Flask.</p>
-  <p><a class="btn btn-lg btn-success" href="gatitos.html" role="button">Ver gatitos</a></p>
+  <p><a class="btn btn-lg btn-success" href="gatitos" role="button">Ver gatitos</a></p>
 </div>
 {% endblock %}
 
