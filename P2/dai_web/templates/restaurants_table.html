@@ -1,0 +1,120 @@
+{% extends 'index.html' %}
+
+
+{% block table %}
+
+<script>
+        var searchBy = "name"
+        var current_page = 1
+
+        function cleanTable(){
+                $('.rest_table').remove();
+        }
+
+        function appendData(parsed_data){
+                var id_row = 0
+                $.each( parsed_data, function( i ) {
+                        $("#results").append(
+                                        "<tr class='rest_table' id=result"+id_row+">"
+                                        +"<td>"+ parsed_data[i].name +" </td>"
+                                        +"<td> "+ parsed_data[i].street +"</td>"
+                                        +"<td>"+ parsed_data[i].borough +"</td>"
+                                        +"<td>"+ parsed_data[i].cuisine +"</td>"
+                                        +"</tr>");
+                        id_row = id_row + 1
+                });
+        }
+
+        function showTable(parsed_data){
+          cleanTable();
+          appendData(parsed_data);
+        }
+
+        function next(){
+                current_page = current_page + 1
+                var key = searchBy
+                var value = $("#search_field").val()
+                var uri = "/api/restaurant/"+key+"/"+value+"/"+current_page;
+                var resource = encodeURI(uri);
+                $.get(resource).done(function(data) {
+                        parsed_data = data
+                        showTable(parsed_data);
+                });
+        }
+
+        function prev(){
+                current_page = current_page - 1
+                if(current_page < 0){
+                  current_page = 0
+                }
+                $.get("/api/restaurant/"+searchBy+"/"+$("#search_field").val()+"/"+current_page).done(function(data) {
+                        parsed_data = data
+                        showTable(parsed_data);
+                });
+        }
+
+
+
+        $(document).ready(function(){
+                $("#name_check").click(function(){
+                        searchBy = "name"
+                });
+                $("#address_check").click(function(){
+                        searchBy = "address"
+                });
+                $("#borough_check").click(function(){
+                        searchBy = "borough"
+                });
+                $("#cuisine_check").click(function(){
+                        searchBy = "cuisine"
+                });
+
+                $("#searchButton").click(function(){
+                        $.get("/api/restaurant/"+searchBy+"/"+$("#search_field").val()).done(function(data) {
+                                parsed_data = data
+                                showTable(parsed_data);
+                        });
+                });
+
+                $("#nextButton").click(function(){
+                        console.log("nextButton")
+                        next()
+                });
+                $("#prevButton").click(function(){
+                        console.log("prevButton")
+                        prev()
+                });
+        });
+
+
+</script>
+
+<label class="radio-inline" id="name_check"><input type="radio" name="optradio" checked="checked">Nombre</label>
+<label class="radio-inline" id="address_check"><input type="radio" name="optradio">Calle</label>
+<label class="radio-inline" id="borough_check"><input type="radio" name="optradio">Barrio</label>
+<label class="radio-inline" id="cuisine_check"><input type="radio" name="optradio">Especialidad</label>
+
+  <div class="input-group">
+    <input type="text" class="form-control" id="search_field" placeholder="Search">
+    <div class="input-group-btn">
+      <button class="btn btn-default" id="searchButton">
+              <small>Buscar</small>
+      </button>
+    </div>
+  </div>
+
+  <table id="results" style="width:100%">
+  <tr>
+    <th>Nombre</th>
+    <th>Dirección</th>
+    <th>Barrio</th>
+    <th>Especialidad</th>
+  </tr>
+</table>
+
+<ul class="pager">
+  <li id="prevButton" class="previous"><a href="javascript:void(0)">Anterior</a></li>
+  <li id="nextButton" class="next nextButton"><a href="javascript:void(0)">Siguiente</a></li>
+</ul>
+
+{% endblock %}

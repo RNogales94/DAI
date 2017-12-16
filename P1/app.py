@@ -1,8 +1,11 @@
 from flask import Flask, render_template
 from flask import session, redirect, url_for, request
 
+from db import find_restaurant
+
 import shelve
 import os
+import json
 
 app = Flask(__name__)
 
@@ -41,6 +44,22 @@ def gatitos():
         return render_template('gatitos.html', loggedIn=True, username=session['username'])
     else:
         return render_template('gatitos.html', loggedIn=False)
+
+@app.route('/restaurants')
+def restaurants():
+    add_history('/restaurants')
+
+    if 'loggedIn' in session:
+        return render_template('restaurants.html', loggedIn=True, username=session['username'])
+    else:
+        return render_template('restaurants.html', loggedIn=False)
+
+
+@app.route('/api/restaurant/<key>/<value>')
+def query(key, value):
+    result = find_restaurant(key, value)
+    myjson = [{"name":row["name"], "street":row["address"]["street"] + " " + row["address"]["building"], "borough":row["borough"],  "cuisine":row["cuisine"]} for row in result]
+    return json.dumps(myjson)
 
 @app.errorhandler(404)
 def page_not_found(e):

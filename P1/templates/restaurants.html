@@ -1,0 +1,172 @@
+{% extends 'home.html' %}
+
+{% block title %} Restaurantes {% endblock %}
+
+{% block login_form %} {% endblock %}
+
+{% block nav_title %}
+Restaurantes
+{% endblock %}
+
+{% block panel %}
+
+<script>
+        var inverted = false;
+        var font_changed = false;
+        var searchBy = "name"
+        var id_row = 0
+        var first_shown = true
+        var primero = 0
+        var ultimo = 10
+        var last_id_row = 0
+
+        function appendData(parsed_data){
+                if(! first_shown){
+                        $('td').remove();
+                }
+                $.each( parsed_data, function( i ) {
+                        $("#results").append(
+                                        "<tr id=result"+id_row+">"
+                                        +"<td>"+ parsed_data[i].name +" </td>"
+                                        +"<td> "+ parsed_data[i].street +"</td>"
+                                        +"<td>"+ parsed_data[i].borough +"</td>"
+                                        +"<td>"+ parsed_data[i].cuisine +"</td>"
+                                        +"</tr>");
+                        id_row = id_row + 1
+                });
+                for (var i = ultimo; i <= id_row; i++) {
+                        $("#result"+i).hide();
+                }
+
+                last_id_row = id_row-1
+                first_shown = false
+                id_row = 0
+                primero = 0
+                ultimo = 10
+        }
+
+        function next(){
+                for (var i = primero; i <= ultimo; i++) {
+                        $("#result"+i).hide();
+                }
+                for (var i = ultimo+1; i <= ultimo+10; i++) {
+                        $("#result"+i).show();
+                }
+                primero = ultimo
+                ultimo = ultimo+10
+                if(ultimo > last_id_row){
+                        ultimo = last_id_row
+                        primero = last_id_row-10
+                }
+        }
+
+        function prev(){
+                for (var i = primero; i <= ultimo; i++) {
+                        $("#result"+i).hide();
+                }
+                for (var i = primero; i >= primero-10; i--) {
+                        $("#result"+i).show();
+                }
+
+                primero = primero-10
+                ultimo = primero
+                if(primero < 0){
+                        primero = 0
+                        ultimo = 10
+                }
+        }
+
+
+
+        $(document).ready(function(){
+                $("#invert_color").click(function(){
+                        if(! inverted){
+                                $("body").css('filter', 'invert(100%)');
+                                inverted=true;
+                        }
+                        else{
+                                $("body").css('filter', 'invert(0%)');
+                                inverted=false;
+                        }
+
+                });
+
+                $("#change_font").click(function(){
+                        if(! font_changed){
+                                $(".display-3").css('font-family', 'Arial black');
+                                font_changed=true;
+                        }
+                        else{
+                                $(".display-3").css('font-family', 'inherit');
+                                font_changed=false;
+                        }
+                });
+                $("#name_check").click(function(){
+                        searchBy = "name"
+                });
+                $("#address_check").click(function(){
+                        searchBy = "address"
+                });
+                $("#borough_check").click(function(){
+                        searchBy = "borough"
+                });
+                $("#cuisine_check").click(function(){
+                        searchBy = "cuisine"
+                });
+
+                $("#searchButton").click(function(){
+                        $.get("/api/restaurant/"+searchBy+"/"+$("#search_field").val()).done(function(data) {
+                                var parsed_data = $.parseJSON(data);
+                                appendData(parsed_data);
+                        });
+                });
+
+                $("#nextButton").click(function(){
+                        next()
+                });
+                $("#prevButton").click(function(){
+                        prev()
+                });
+        });
+
+
+</script>
+
+<div class="jumbotron">
+  <div>
+          <button id="invert_color">Invertir Colores</button>
+          <button id="change_font">Cambiar Fuente</button>
+
+  </div>
+  <h1 class="display-3">Restaurantes</h1>
+
+<label class="radio-inline" id="name_check"><input type="radio" name="optradio" checked="checked">Nombre</label>
+<label class="radio-inline" id="address_check"><input type="radio" name="optradio">Calle</label>
+<label class="radio-inline" id="borough_check"><input type="radio" name="optradio">Barrio</label>
+<label class="radio-inline" id="cuisine_check"><input type="radio" name="optradio">Especialidad</label>
+
+  <div class="input-group">
+    <input type="text" class="form-control" id="search_field" placeholder="Search">
+    <div class="input-group-btn">
+      <button class="btn btn-default" id="searchButton">
+              <small>Buscar</small>
+      </button>
+    </div>
+  </div>
+
+  <table id="results" style="width:100%">
+  <tr>
+    <th>Nombre</th>
+    <th>Dirección</th>
+    <th>Barrio</th>
+    <th>Especialidad</th>
+  </tr>
+</table>
+
+<div>
+<button type="button" class="btn btn-xs" id="prevButton">Anterior</button>
+<button type="button" class="btn btn-xs" id="nextButton">Siguiente</button>
+</div>
+</div>
+
+{% endblock %}
