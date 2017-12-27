@@ -1,2 +1,3 @@
 # DAI
-Creación de una aplicación web usando Flask
+P1 --> Flask 
+P2 --> Django
