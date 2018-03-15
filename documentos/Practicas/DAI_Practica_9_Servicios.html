@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>DAI Práctica 9 Servicios</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/prism.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-markup.min.js"></script>
+<style>
+p {
+   font-size: 1em;
+   margin-top: 1.2em;
+  }
+  h5 {
+     color: darkgreen;
+ }
+</style>
+</head>
+<body>
+<div class="container">
+	<br />
+	<h2>DAI Práctica 9 </h2>
+	<br/>
+	<h4>Servicios y librerías JS</h4>
+<br />
+<p>
+   En esta práctica añadiremos algún servicio web de los disponibles en la web a nuestra página.
+</p>
+<br />
+
+<h5>Google Maps</h5>
+<p>
+   Haremos una página de detalle de información de cada restaurante que con un mapa como los de
+   <a href="https://developers.google.com/maps/documentation/javascript/?hl=es">Google Maps JavaScript API</a>
+   y/o <a href="https://developers.google.com/maps/documentation/streetview/?hl=es">Google Street View Image API</a>,
+   usando las coordenadas incluidas en la ficha de cada restaurante.
+</p>
+<p>
+   Las coordenadas de latitud y longitud están al revés en la BD, normalmente serían [<b>lat</b>,&nbsp;<b>lon</b>]
+   y en <a href="https://docs.mongodb.com/getting-started/shell/import-data/"> ejemplo
+   de la BD</a> están [<b>lon</b>,&nbsp;<b>lat</b>]
+</p>
+<br /><br />
+<h5>Highcharts</h5>
+<p>
+   <a href="https://www.highcharts.com/">Highcharts</a> un librería de JavaScript que nos permite integrar gráficas estadísticas
+   (y de otros tipos) en nuestra página web, entre las que encontramos gráficas de tarta, ditribución de puntos,
+   gráficas de barras, tablas dinámicas, gráficas de líneas, líneas temporales, etc.
+</p>
+<p>
+   La manera más habitual de usarla es introduciendo un trozo de código JavaScript en nuestra página.
+   Dicho JavaScript carga algunas bibliotecas, define las series de datos a mostrar, selecciona las opciones para configurar
+   la gráfica y crea un objeto gráfica con un identificador determinado.
+   En el cuerpo de la página web se definirá un objeto <code>&lt;div&gt;</code> con el identificador de la gráfica donde se mostrará la misma.
+</p>
+<p>
+
+   La biblioteca es bastante sencilla de utilizar y tiene una <a href="https://www.highcharts.com/docs">documentación</a> bastante clara.
+</p>
+<p>
+   En este ejercicio vamos a intentar integrar dicha biblioteca en nuestro sitio web. Para ello crearemos alguna página que nos permita
+   visualizar una gráfica con datos de la BD, p.e. al estlo de <a href="https://www.highcharts.com/demo/column-rotated-labels">esta</a>,
+   con los datos del número de restaurantes por tipo de cocina.
+</p>
+<br />
+<h6><span class="badge badge-secondary">Para nota</span></h6>
+<p>
+   Hacer el ejercicio anterior pero obieniendo los datos a través de una llamada AJAX, como en
+   este <a href="https://www.highcharts.com/demo/line-ajax">demo</a>
+</p>
+
+</div>
+<br /><br />
+
+</body>
+</html>

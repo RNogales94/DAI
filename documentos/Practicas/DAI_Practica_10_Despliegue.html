@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>DAI Práctica 10 Despliegue</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/prism.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-markup.min.js"></script>
+<style>
+p {
+   font-size: 1em;
+   margin-top: 2em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+	<br />
+	<h2>DAI Práctica 10 </h2>
+	<br/>
+	<h4>Despliegue</h4>
+<br />
+
+<p>
+   <img src="https://raw.githubusercontent.com/realpython/flask-deploy/master/images/localhost2.jpg" />
+</p>
+
+<p>
+La última práctica consiste en tener una aplicación web desplegada en un ambiente de 'producción',
+es decir funcionando con la depuración en 'OFF' y conectada
+a un servidor web como <a href="https://www.nginx.com/">ngix</a> o <a href="http://httpd.apache.org/">apache</a> en
+el puerto 80.
+</p>
+<p>
+   Puede ser alguna que se haya hecho en las prácticas con flask o django, u otra que se haya hecho
+en la asignatura de Infraestructura Virtual.
+</p>
+<p>
+   El despliuege puede ser como <a href="https://stackoverflow.com/questions/16820336/what-is-saas-paas-and-iaas-with-examples">IAAS</a> en
+   una maquina virtual, o como <a href="https://stackoverflow.com/questions/16820336/what-is-saas-paas-and-iaas-with-examples">PAAS</a> en
+   un serivdor como <a href="https://www.heroku.com/">heroku</a>, o incluso con <a href="https://docs.docker.com/compose/django/">contenedores</a>
+   <a href="https://en.wikipedia.org/wiki/Docker_(software)">docker</a>
+</p>
+<p>
+   El despliegue de una aplicación con django, está contada en:
+   <a href="https://docs.djangoproject.com/en/1.11/howto/deployment/wsgi/">How to deploy with WSGI
+   </a>, <a href="https://docs.djangoproject.com/en/1.11/howto/deployment/wsgi/gunicorn/">How to use Django with Gunicorn</a>,
+   <a href="http://docs.gunicorn.org/en/latest/deploy.html">Deploying Gunicorn</a>,
+   <a href="http://docs.gunicorn.org/en/latest/deploy.html#supervisor">Supervisor</a>, y en las transparencias de clase.
+</p>
+<p>
+Básicamente consiste en poner la configuración de producción, es decir en el archivo
+<b>settings.py</b> estarán las variables:
+</p>
+<pre><code class="language-python">DEBUG = False
+
+ALLOWED_HOSTS = ['*']
+</code></pre>
+<p>
+
+Con esto dejará de funciona el servidor de desarrollo, y de servir los contenidos de <b>/static</b>, que tendrán
+que pasar a servirse desde el servidor web de producción. Django tiene un script:
+<a href="https://docs.djangoproject.com/en/1.11/ref/contrib/staticfiles/">collectstatic</a>
+para facilitar pasar los contenidos a otro directorio.
+</p>
+
+<p>
+   Después habrá que poner funcionar la aplicación desde un servidor web
+    <a href="https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface">wsgi</a>,
+   (p.e. <a href="http://gunicorn.org/">gunicorn</a>),
+
+   y conectar la aplicación y el resto de servicios que pudiera haber (p.e. servir los archivos static) a un servidor
+    web que también
+   funcione como <a href="https://en.wikipedia.org/wiki/Reverse_proxy">proxy inverso</a> (p.e. <a href="https://www.nginx.com/">nginx</a>)
+   en el puerto 80
+</p>
+<p>
+   Los programas necesarios, nginx, gunicorn y supervisor se pueden instalar instalan desde el apt-get:
+   <pre><code class="language-bash">&gt; sudo apt-get install nginx supervisor</code></pre>
+</p>
+<p>
+   gunicorn lo instalamos con pip3
+   <pre><code class="language-bash">&gt; sudo pip3 install gunicorn</code></pre>
+</p>
+
+<p>
+   Para poner a funcionar <a href="http://docs.gunicorn.org/en/latest/run.html">gunicorn</a> en las versión más reciente sería:
+   <pre><code class="language-bash"># para ejecutar el puerto 8000
+/usr/local/bin/gunicorn sitio_web.wsgi -b :8000</code></pre>
+</p>
+<p>
+   La configuración de superivisor y de nginx sería la que aparece en la <a href="http://docs.gunicorn.org/en/latest/deploy.html">
+   documentación de gunicorn</a>, y en las transparecias de clase
+</p>
+<p>
+   Por último habría que reconfigurar los puertos de la máquina virtual en el <code>Vagrantfile</code>
+</p>
+
+<p>
+   Para automatizar el proceso, pondremos scripts de despliegue con <a href="https://en.wikipedia.org/wiki/Makefile">Makefile</a>, o
+   <a href="http://docs.fabfile.org/en/1.14/tutorial.html">fabric</a> y provisionar la maquina virtual en el <code>Vagrantfile</code>
+</p>
+<p style="font-size:80%">
+   Algunos enlaces:
+   <ul style="font-size:80%; margin-top:-1em;">
+      <li>
+         <a href="https://devcenter.heroku.com/articles/deploying-python">Deploying Python and Django Apps on Heroku</a> (PAAS)
+      </li>
+      <li>
+         <a href="https://realpython.com/blog/python/deploying-a-django-app-and-postgresql-to-aws-elastic-beanstalk/">
+         Deploying a Django Application to Elastic Beanstalk</a> (PAAS)
+      </li>
+      <li>
+         <a href="https://www.packtpub.com/books/content/how-deploy-simple-django-app-using-aws/">
+         How to Deploy a Simple Django App Using AWS</a> (IAAS, máquina virtual)
+      </li>
+
+   </ul>
+</p>
+
+
+</div>
+<br /><br />
+</body>
+</html>

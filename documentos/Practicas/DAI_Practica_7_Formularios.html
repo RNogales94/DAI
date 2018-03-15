@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>DAI Práctica 7 Formularios</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/prism.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-markup.min.js"></script>
+<style>
+p {
+   font-size: 1em;
+   margin-top: 2em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+	<br />
+	<h2>DAI Práctica 7 </h2>
+	<br/>
+	<h4>Formularios</h4>
+<br />
+<p>
+En esta práctica, haremos opciones para añadir o modificar datos de restaurantes.
+</p>
+<p>
+Usaremos la clase <a href="https://docs.djangoproject.com/en/1.11/#forms">Forms</a> que incluye Django, procurando utilizar todos los automatismos que incluye
+(validaciones, mensajes de error automáticos, generación automática en las plantillas).
+</p>
+<p>
+ En  <a href="https://docs.djangoproject.com/en/1.11/topics/forms/">Forms</a> hay una introducción a los
+ formularios y en
+<a href="http://www.tangowithdjango.com/book17/chapters/forms.html">Fun with forms</a> y
+<a href="http://django-marcador.keimlink.de/en/forms.html">Forms</a> hay ejemplos, aunque en nuestro
+caso no actualizaremos la BD SQL que usa django mediante su <a href="https://docs.djangoproject.com/en/1.11/topics/db/models/">Model</a>,
+sino que actuaremos directamente con los documentos de <code>mongoDB</code>
+</p>
+
+<p>
+   Para tener el código ordenado, es conveniente poner el código de los formularios en un archivo aparte:
+   <pre><code class="language-python"># restaurantes/forms.py
+
+from django import forms
+from django.core.exceptions import ValidationError
+
+def valida_codigo_postal(value):
+
+   if value &lt; 10000 or value &gt; 99999:
+		raise ValidationError('%s no parece ser un código postal' % value)
+
+
+class RestauranteForm(forms.Form):
+   name    = forms.CharField(label='Nombre', max_length=60, strip=True,
+                             widget=forms.TextInput(
+                                attrs={'class':'form-control text-muted col-md-4',
+                                       'size':30,
+                                       'placeholder':'el nombre que sea',
+                                      })
+                            )
+
+   cuisine = forms.CharField(label='Tipo', max_length=80, required=False)
+
+   zipcode = forms.IntegerField(label='Código Postal',
+                                validators=[valida_codigo_postal])
+
+   ...
+   </code></pre>
+</p>
+<p>
+   e introducir mediante <a href="https://docs.djangoproject.com/en/1.11/ref/forms/widgets/">widgets</a> atributos adicionales en la generación de
+   html que sería:
+   <pre><code class="language-markup">
+      &lt;form action="{% url 'nuevo_restaurante' %}" method="post"&gt;
+   		&lt;div class="form-group"&gt;
+   			{% csrf_token %}
+   			{{ form.as_p }}
+   			&lt;input type="submit" value="Enviar" /&gt;
+   		&lt;/div&gt;
+   	&lt;/form&gt;
+   </code></pre>
+</p>
+<p>
+   Los datos los recogeriamos en <code>forms.cleaned_data</code> después de validarlos
+   <pre><code class="language-python"># restaurantes/views.py
+
+def nuevo_restaurante(request):
+
+   form = RestauranteForm()
+   if request.method == 'POST':
+      form = RestauranteForm(request.POST)
+      if form.is_valid():                   # se pasan los validadores
+         datos = form.cleaned_data
+         ...
+         return redirect('/donde_sea')
+
+   # GET o error de validación
+   context = {
+      'form': form,              # en blanco o rellena con errores
+   }
+   return (request, 'form.html', context)
+
+
+</code></pre>
+</p>
+
+
+
+</div>
+<br /><br />
+
+</body>
+</html>

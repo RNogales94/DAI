@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>DAI Práctica 7 Autenfificación</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/themes/prism.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/prism.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/components/prism-markup.min.js"></script>
+<style>
+p {
+   font-size: 1em;
+   margin-top: 2em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+	<br />
+	<h2>DAI Práctica 8 </h2>
+	<br/>
+	<h4>Autentificación y autorización de usuarios</h4>
+<br />
+
+<p>
+   Añadiremos ahora todo lo necesario para el registro,
+   <a href="https://serverfault.com/questions/57077/what-is-the-difference-between-authentication-and-authorization">
+   la autentificación y la autorización</a> de usuarios.
+</p>
+<p>
+
+   Usaremos el plugin
+   <a href="https://django-registration-redux.readthedocs.io/en/latest/">django-registration-redux</a>,
+   que incorpora todas las vistas y plantillas necesarias, registro en dos pasos (con activación
+   de contraseña por e-mail), gestión de la contraseña olvidada con tokens, etc.
+</p>
+
+<div class="highlight">
+ <pre><code class="language-bash" ><span class="nv">$ </span>pip3 install django-registration-redux</code></pre>
+</div>
+
+<p>
+   Y seguimos los pasos de <a href="http://www.tangowithdjango.com/book17/chapters/login_redux.html">
+   User Authentication with Django-Registration-Redux</a>, incluyendo <code>'registration'</code>
+   en las <b>INSTALLED_APPS</b> de <code>settings.py</code>, y las rutas en <code>urls.py</code>
+</p>
+<p>
+   Como indica el tutorial, las plantillas las podemos coger de
+   <a href="https://github.com/macdhuibh/django-registration-templates">macdhuibh/django-registration-templates</a>
+   y las modificamos con bootstrap, para que queden como <a href="https://getbootstrap.com/docs/4.0/examples/signin/">esta</a>
+</p>
+
+<p>
+   Ahora ya podremos gestinar la autorización de usuarios en las vistas, simplemente incluyendo el decorador
+   <code>@login_required</code> antes de cada 'vista' de Django:
+   <a href="https://docs.djangoproject.com/en/1.11/topics/auth/default/#the-login-required-decorator">login required decorator</a>
+</p>
+
+
+<p>
+   Alternativamente podríamos usar <a href="https://www.intenct.nl/projects/django-allauth/">django-allauth</a>,
+   que incluye además la autentificación delegada en redes sociales.
+</p>
+
+</div>
+<br /><br />
+</body>
+</html>

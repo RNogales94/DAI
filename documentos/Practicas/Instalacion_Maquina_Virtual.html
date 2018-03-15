@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Instalación Máquina Virtual</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<style>
+p {text-indent: 0em;
+   font-size: 120%;
+   margin-top: 2em;
+  }
+ul{
+   font-size: 120%;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+	<br>
+	<h2>Instalación fácil de una Máquina Virtual para las prácticas</h2>
+	<p>
+		Para las prácticas del curso, utilizaremos una máquina virtual con <i>Ubuntu 16.04</i>.
+		<p>De esta
+		manera conseguimos:
+		<ul>
+			<li>Aislar nuestro código del resto del ordenador, sin que interfiera
+			lo que pueda instalarse antes o después</li>
+			<li>Conseguir un entorno <b>idéntico</b> para todos los participantes del curso</li>
+			<li>Tener nuestra aplicación lista para subirla a la nube en un
+			<a href="https://azure.microsoft.com/es-es/overview/what-is-iaas/">IAAS</a></li>
+		</ul>
+		</p>
+	</p>
+	<p> Para esto lo más fácil es usar <a href="https://www.vagrantup.com/">Vagrant</a>, un software
+	para facilitar la instalación, configuración y provisionamento de máquinas virtuales.
+	</p>
+	<p> Lo haremos siguiendo la página <a href="http://terokarvinen.com/2016/ubuntu-16-04-xenial-guest-on-vagrant-vagrant-init-bentoubuntu-16-04">
+	Ubuntu 16.04 Xenial Guest on Vagrant – vagrant init bento/ubuntu-16.04</a>
+    <br>(la distribución oficial de ubuntu 16.04 no funciona del todo bien con vagrant)
+</p>
+<p>
+<pre>
+<i># Instalamos primero <b>virtualbox</b> y <b>vagrant</b> en el host
+# (en ubuntu:)</i>
+sudo apt-get install virtualbox
+sudo apt-get install vagrant
+
+<i># Creamos el directorio para alojar la máquina virtual (MV):</i>
+mkdir DAI
+cd DAI
+
+<i># Creamos el archivo de configuración <i>Vagrantfile</i> ;
+# desde este archivo podremos instalar interfaces, abrir puertos,
+# crear carpetas compartidas, ajustar la memoria de la MV, instalar paquetes, etc</i>
+DAI&gt; vagrant init bento/ubuntu-16.04
+
+
+<i># Editamos primero el archivo Vagrantfile para definir las carpetas compartidas, y los puertos abiertos de la MV
+#Ahora instalamos la MV</i>
+DAI&gt; vagrant up
+
+<i># y ya podemos conectarnos</i>
+DAI&gy; vagrant ssh
+
+<i># parar la MV</i>
+DAI&gt; vagrant halt
+
+<i># o borrarla</i>
+DAI&gt; vagrant destroy
+</pre>
+<i>(*) es recomendable una conexión a internet rápida para la instalación </i>
+</p>
+
+</div>
+</body>
+</html>
